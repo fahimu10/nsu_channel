@@ -103,6 +103,111 @@ span.hightlight{
                 
             </div>
 
+<!-- PHP Start -->
+<?php
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
+
+if(isset($_POST["email"])) 
+    {   
+        $emailTo = 'contact@nsuchannel.fahimuddin.dev';
+        $emailFrom = $_POST["email"];
+        $message = $_POST["message"];
+        $name = $_POST["name"];
+        $subject = $_POST["subject"];
+
+
+        // Instantiation and passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->isSMTP();                                            // Send using SMTP
+            $mail->Host       = 'nsuchannel.fahimuddin.dev';                    // Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+            $mail->Username   = 'sendingserver@nsuchannel.fahimuddin.dev';                     // SMTP username
+            $mail->Password   = 'nsuchannel';                               // SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+            //Recipients
+            $mail->setFrom("$emailFrom", "$name");
+            $mail->addAddress("$emailTo");     // Add a recipient
+            $mail->addReplyTo("$emailFrom", "$name");
+
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = "$subject";
+            $mail->Body    = " <h1>Message Body</h1>
+                                <p>$message</P>";
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+            $_SESSION['success'] = "Message Sent";
+            // header('location: index.php');
+        } catch (Exception $e) {
+          $_SESSION['status'] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        //   header('location: index.php');
+        } 
+        exit();   
+    }
+?>
+
+<!-- PHP End -->
+             <!-- Testing Code Start -->
+             <div class="container mt-3 pt-2">
+                <h4 class="text-center text-white">Contact Us</h4>
+                <hr class="divider">
+                <?php 
+                if(isset($_SESSION['success']) && $_SESSION['success'] != '')
+                {
+                    echo '<h4 class="bg-success text-white p-1"> '.$_SESSION['success'].'</h4>';
+                    unset($_SESSION['success']);
+                }
+                if(isset($_SESSION['status']) && $_SESSION['status'] != '')
+                {
+                    echo '<h4 class="bg-danger text-white p-1">'.$_SESSION['status'].'</h4>';
+                    unset($_SESSION['status']);
+                }
+                ?>
+
+            <form method="POST">
+                <div class="form-group my-4">
+                    <label for="formGroupExampleInput" class="mb-2" style="color : #ffffff;">Your Name</label>
+                    <input type="text" name="name" class="form-control" id="formGroupExampleInput" placeholder="Enter Name" required>
+                </div>
+                <div class="form-group my-4">
+                    <label for="exampleInputEmail1" class="mb-2" style="color : #ffffff;">Email address</label>
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required>
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group my-4">
+                    <label for="formGroupExampleInput" class="mb-2" style="color : #ffffff;">Subject</label>
+                    <input type="text" name="subject" class="form-control" id="formGroupExampleInput" placeholder="Enter Subject" required>
+                </div>
+                <div class="form-group my-4">
+                    <label for="exampleFormControlTextarea1" class="mb-2" style="color : #ffffff;">Your Message</label>
+                    <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-bottom: 30px;">Submit</button>
+            </form>
+                
+       
+            </div>  
+                
+          
+            <!-- Testing Code End -->
+
+            
+
+
 
 <script>
      $('.read_more').click(function(){
