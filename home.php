@@ -103,67 +103,68 @@ span.hightlight{
                 
             </div>
 
-<!-- PHP Start -->
-<?php
-// Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+            <!-- PHP Start -->
+            <?php
+            // Import PHPMailer classes into the global namespace
+            // These must be at the top of your script, not inside a function
+            use PHPMailer\PHPMailer\PHPMailer;
+            use PHPMailer\PHPMailer\Exception;
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-
-
-if(isset($_POST["email"])) 
-    {   
-        $emailTo = 'contact@nsuchannel.fahimuddin.dev';
-        $emailFrom = $_POST["email"];
-        $message = $_POST["message"];
-        $name = $_POST["name"];
-        $subject = $_POST["subject"];
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
 
 
-        // Instantiation and passing `true` enables exceptions
-        $mail = new PHPMailer(true);
+            if(isset($_POST["email"])) 
+                {   
+                    $emailTo = 'contact@nsuchannel.fahimuddin.dev';
+                    $emailFrom = $_POST["email"];
+                    $message = $_POST["message"];
+                    $name = $_POST["name"];
+                    $subject = $_POST["subject"];
 
-        try {
-            //Server settings
-            $mail->isSMTP();                                            // Send using SMTP
-            $mail->Host       = 'nsuchannel.fahimuddin.dev';                    // Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = 'sendingserver@nsuchannel.fahimuddin.dev';                     // SMTP username
-            $mail->Password   = 'nsuchannel';                               // SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
-            //Recipients
-            $mail->setFrom("$emailFrom", "$name");
-            $mail->addAddress("$emailTo");     // Add a recipient
-            $mail->addReplyTo("$emailFrom", "$name");
+                    // Instantiation and passing `true` enables exceptions
+                    $mail = new PHPMailer(true);
 
-            // Content
-            $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = "$subject";
-            $mail->Body    = " <h1>Message Body</h1>
-                                <p>$message</P>";
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                    try {
+                        //Server settings
+                        $mail->isSMTP();                                            // Send using SMTP
+                        $mail->Host       = 'nsuchannel.fahimuddin.dev';                    // Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                        $mail->Username   = 'sendingserver@nsuchannel.fahimuddin.dev';                     // SMTP username
+                        $mail->Password   = 'nsuchannel';                               // SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+                        $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
-            $mail->send();
-            $_SESSION['success'] = "Message Sent";
-            // header('location: index.php');
-        } catch (Exception $e) {
-          $_SESSION['status'] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        //   header('location: index.php');
-        } 
-        exit();   
-    }
-?>
+                        //Recipients
+                        $mail->setFrom("$emailFrom", "$name");
+                        $mail->addAddress("$emailTo");     // Add a recipient
+                        $mail->addReplyTo("$emailFrom", "$name");
 
-<!-- PHP End -->
+                        // Content
+                        $mail->isHTML(true);                                  // Set email format to HTML
+                        $mail->Subject = "$subject";
+                        $mail->Body    = " <h1>Message Body</h1>
+                                            <p>$message</P>";
+                        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                        $mail->send();
+                        $_SESSION['success'] = "Message Sent";
+                        // header('location: index.php');
+                    } catch (Exception $e) {
+                    $_SESSION['status'] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    //   header('location: index.php');
+                    } 
+                    exit();   
+                }
+            ?>
+
+            <!-- PHP End -->
+             
              <!-- Testing Code Start -->
              <div class="container mt-3 pt-2">
-                <h4 class="text-center text-white">Contact Us</h4>
+                <h4 class="text-center text-white">Get In Touch</h4>
                 <hr class="divider">
                 <?php 
                 if(isset($_SESSION['success']) && $_SESSION['success'] != '')
